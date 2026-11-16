@@ -9,7 +9,7 @@ const SURGEONS = {
     name: 'Dr. Lomas',
     website: 'https://lomasortho.com',
     packet: 'packets/lomas-elbow.pdf', packetPages: 6,  // page images live in packets/lomas-elbow/
-    opDays: 'Tuesdays and Fridays',
+    opDays: 'Tue and Fri',
     contacts: [
       { name: 'Surgical scheduling', who: 'Anetam Kaur', role: 'Insurance, forms, and urgent questions', phone: '646-460-8723' },
       { name: 'Office', who: 'Lorenzo Hayes', role: 'NYU Langone Orthopedic Center', phone: '646-501-7223' },

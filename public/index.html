@@ -197,6 +197,29 @@
   .linkrow { width: 100%; border: 0; background: transparent; text-align: left; cursor: pointer; color: var(--label); align-items: center; }
   .linkrow .chev { width: 9px; height: 9px; border-right: 2px solid var(--label-3); border-bottom: 2px solid var(--label-3); transform: rotate(-45deg); margin-right: 4px; flex: none; }
 
+  /* "About your surgery" row and page */
+  .about-btn { width: 100%; display: flex; align-items: center; gap: 12px; margin-top: 10px; background: var(--card); border: 0; border-radius: var(--radius); padding: 12px 16px; text-align: left; cursor: pointer; color: var(--label); font-size: 17px; font-weight: 600; }
+  .about-btn[hidden] { display: none; }
+  .about-btn .row-title { flex: 1; }
+  .about-btn .chev { width: 9px; height: 9px; border-right: 2px solid var(--label-3); border-bottom: 2px solid var(--label-3); transform: rotate(-45deg); margin-right: 4px; flex: none; }
+  .about { position: fixed; inset: 0; z-index: 49; background: var(--bg); display: flex; flex-direction: column; }
+  .about[hidden] { display: none; }
+  .about-body { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .about-body .wrap { padding-top: 12px; padding-bottom: calc(env(safe-area-inset-bottom) + 24px); }
+  .ab-ai { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; line-height: 1.35; color: var(--label-2); background: var(--fill); border-radius: 10px; padding: 8px 10px; }
+  .ab-ai svg { width: 15px; height: 15px; flex: none; margin-top: 1px; }
+  .ab-h { font-size: 26px; font-weight: 700; letter-spacing: -.02em; line-height: 1.15; margin: 16px 0 4px; }
+  .ab-lede { font-size: 17px; color: var(--label-2); margin: 0 0 12px; }
+  .ab-fig { background: var(--card); border-radius: var(--radius); padding: 12px; margin: 0 0 12px; }
+  .ab-fig svg { display: block; width: 100%; height: auto; }
+  .ab-card { background: var(--card); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 12px; }
+  .ab-card h3 { margin: 0 0 6px; font-size: 17px; }
+  .ab-card p { margin: 0 0 6px; }
+  .ab-card ul { margin: 0; padding-left: 20px; }
+  .ab-card li { margin: 3px 0; }
+  .ab-src { font-size: 12px; color: var(--label-2); line-height: 1.4; margin: 14px 4px 0; }
+  .ab-src a { color: var(--label-2); }
+
   /* Full packet viewer (in-app page) */
   .packet { position: fixed; inset: 0; z-index: 50; background: var(--bg); display: flex; flex-direction: column; }
   .packet[hidden] { display: none; }
@@ -354,6 +377,7 @@
     <span class="sb-main"><span class="sb-k">Your surgery</span><span class="sb-t" id="sbT" style="display:block"></span><span class="sb-s" id="sbS" style="display:block"></span></span>
     <span class="sb-edit">Edit<span class="chev"></span></span>
   </button>
+  <button class="about-btn" id="aboutBtn" type="button" hidden><span class="tile" style="background:var(--teal, #0a84a6)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span><span class="row-title">About your surgery</span><span class="chev"></span></button>
   <section class="hero" id="hero"></section>
   <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>If anything here differs from what your care team tells you, follow your care team’s instructions.</span></div>
   <div class="seg-wrap">
@@ -392,6 +416,15 @@
     </div>
   </form>
 </dialog>
+
+<section class="about" id="aboutView" hidden aria-label="About your surgery">
+  <div class="packet-bar">
+    <button class="packet-back" id="aboutBack" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>Back</button>
+    <div class="packet-title">About Your Surgery</div>
+    <span></span>
+  </div>
+  <div class="about-body" id="aboutBody"></div>
+</section>
 
 <section class="packet" id="packetView" hidden aria-label="Full surgery packet">
   <div class="packet-bar">
@@ -544,9 +577,9 @@ function sanitize() {
 function parseDate(s) { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); }
 function addDays(dt, n) { const x = new Date(dt); x.setDate(x.getDate() + n); return x; }
 function diffDays(a, b) { return Math.round((Date.UTC(a.getFullYear(), a.getMonth(), a.getDate()) - Date.UTC(b.getFullYear(), b.getMonth(), b.getDate())) / 864e5); }
-// The Tuesday or Friday before surgery (when the PA usually does the video visit).
+// The Tue or Fri before surgery (when the PA usually does the video visit).
 function priorTueFri(dt) { let x = addDays(dt, -2); while (x.getDay() !== 2 && x.getDay() !== 5) x = addDays(x, -1); return x; }
-const fmtLong = dt => dt.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+const fmtLong = dt => dt.toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric' });  // weekdays are always abbreviated (Sat)
 const fmtShort = dt => dt.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
 const monAbbr = dt => dt.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
 const today = () => testToday ? parseDate(testToday) : (n => new Date(n.getFullYear(), n.getMonth(), n.getDate()))(new Date());
@@ -693,8 +726,8 @@ function preSteps(c) {
       'Keep taking vitamins D and C, and XR or Klean Athlete if you use them.',
       'Tylenol is OK until the day before surgery.',
     ]) },
-    { id: 'pa', appt: true, approx: !appt('pa'), at: c.surgery ? (appt('pa') || priorTueFri(c.surgery)) : null, off: -3, calM: 'DAYS', calD: '3-4', rel: 'The Tuesday or Friday before', title: 'Video visit with our PA', body: ul([
-      'On MyChart, usually the Tuesday or Friday morning before surgery.',
+    { id: 'pa', appt: true, approx: !appt('pa'), at: c.surgery ? (appt('pa') || priorTueFri(c.surgery)) : null, off: -3, calM: 'DAYS', calD: '3-4', rel: 'The Tue or Fri before', title: 'Video visit with our PA', body: ul([
+      'On MyChart, usually the Tue or Fri morning before surgery.',
       appt('pa') ? 'You set this date. Check MyChart for the time.' : '<strong>This date is approximate.</strong> The office books it when your surgery is scheduled. Check MyChart for the exact day and time.',
       'We’ll go over what to expect before and after surgery and answer your questions.',
     ]) },
@@ -1084,6 +1117,41 @@ function renderHero(c) {
   }
 }
 
+/* ============================================================
+   ABOUT YOUR SURGERY: short, plain-language summaries (one per surgery).
+   Written with AI help; keep them short, about what the repair does.
+   Keyed by surgery, shared by all surgeons. In the text, {surgeon} / {Surgeon} become the
+   patient's surgeon (e.g. "Dr. Lomas"), or "your surgeon" / "Your surgeon" if none is set.
+   ============================================================ */
+const ABOUT = {
+  dbr: {
+    title: 'Distal biceps repair',
+    lede: 'Reattaches your biceps tendon to the forearm bone, just below the elbow.',
+    sections: [
+      ['What it does', '<p>A tendon is a strong cord that connects muscle to bone. This surgery puts your biceps tendon back in its place, so your arm can get its strength back for:</p>' + ul(['Bending your elbow', 'Turning your palm up, like turning a doorknob'])],
+      ['How it’s done', ul(['One or two small cuts are made near the front of your elbow.', '{Surgeon} finds the end of the tendon and gently brings it back down to the forearm bone.', 'The tendon is fixed to the bone with a small implant, like a button or anchor. It stays in for good.', 'The cut is closed and your arm goes into a splint.', 'You go home the same day.'])],
+      ['After surgery', ul(['This site has the steps, day by day.', 'Your arm starts in a splint, then a brace.', 'No lifting with that arm until {surgeon} says it’s OK.', 'Physical therapy slowly brings back your motion and strength.'])],
+    ],
+    source: 'Based on: AAOS OrthoInfo, <a href="https://www.orthoinfo.org/bodypart/elbow/biceps-tendon-tear-at-the-elbow/" target="_blank" rel="noopener">“Biceps Tendon Tear at the Elbow”</a>.',
+  },
+};
+
+function renderAbout(a) {
+  // Only the surgeon the patient chose (no default), so the wording never names the wrong doctor.
+  const sg = SURGEONS[settings.s] || null;
+  const fill = html => html.replace(/\{surgeon\}/g, sg ? sg.name : 'your surgeon').replace(/\{Surgeon\}/g, sg ? sg.name : 'Your surgeon');
+  const packet = sg && sg.packet ? group(`<button type="button" class="row linkrow" data-packet>${tile('doc', 'var(--accent)')}<span class="row-main"><span class="row-title" style="display:block">View the full surgery packet</span><span class="row-sub" style="display:block">All the instructions from ${sg.name}’s office</span></span><span class="chev"></span></button>`) : '';
+  return fill(`<div class="wrap">
+    <div class="ab-ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>AI-written general summary of this operation. It doesn’t include the details of your case. Always follow what {surgeon} and your care team tell you.</span></div>
+    ${packet ? `<div style="margin-top:12px">${packet}</div>` : ''}
+    <h2 class="ab-h">${a.title}</h2>
+    <p class="ab-lede">${a.lede}</p>
+    ${a.fig ? `<figure class="ab-fig" style="margin:0 0 12px">${a.fig}</figure>` : ''}
+    ${a.sections.map(([h, body]) => `<div class="ab-card"><h3>${h}</h3>${body}</div>`).join('')}
+    ${a.source ? `<p class="ab-src">${a.source}</p>` : ''}
+  </div>`);
+}
+
 function renderHeader(c) {
   document.getElementById('todayLbl').textContent = fmtLong(today());
   const t = document.getElementById('sbT'), s = document.getElementById('sbS');
@@ -1092,6 +1160,7 @@ function renderHeader(c) {
     t.textContent = settings.p ? PROCEDURES[settings.p].label : (AREAS[settings.a] ? AREAS[settings.a].label : 'Elbow') + ' surgery';
     s.textContent = [settings.s ? SURGEONS[settings.s].name : '', c.surgery ? fmtLong(c.surgery) : 'No date yet'].filter(Boolean).join(' · ');
   }
+  document.getElementById('aboutBtn').hidden = !ABOUT[settings.p];
   document.documentElement.style.setProperty('--top-h', document.querySelector('.topbar').offsetHeight + 'px');
 }
 
@@ -1206,13 +1275,34 @@ function syncPacket() {
     el.scrollTop = 0;
   }
   packetView.hidden = !show;
-  document.body.style.overflow = show ? 'hidden' : '';
+  document.body.style.overflow = (show || location.hash === '#about') ? 'hidden' : '';
 }
 window.addEventListener('hashchange', syncPacket);
-document.getElementById('contacts').addEventListener('click', e => {
+document.addEventListener('click', e => {
   if (!e.target.closest('[data-packet]')) return;
   packetOpenedHere = true;
   location.hash = 'packet';
+});
+
+/* About your surgery: an in-app page (#about) with a Back button. */
+const aboutView = document.getElementById('aboutView');
+let aboutOpenedHere = false;
+function syncAbout() {
+  const a = location.hash === '#about' && ABOUT[settings.p];
+  if (a) {
+    const body = document.getElementById('aboutBody');
+    const key = settings.p + '|' + (settings.s || '');
+    if (body.dataset.key !== key) { body.dataset.key = key; body.innerHTML = renderAbout(a); }
+  }
+  aboutView.hidden = !a;
+  document.body.style.overflow = (a || location.hash === '#packet') ? 'hidden' : '';
+}
+window.addEventListener('hashchange', syncAbout);
+document.getElementById('aboutBtn').addEventListener('click', () => { aboutOpenedHere = true; location.hash = 'about'; document.getElementById('aboutBody').scrollTop = 0; });
+document.getElementById('aboutBack').addEventListener('click', () => {
+  if (aboutOpenedHere) history.back();
+  else history.replaceState(null, '', location.pathname + location.search), syncAbout();
+  aboutOpenedHere = false;
 });
 document.getElementById('packetBack').addEventListener('click', () => {
   if (packetOpenedHere) history.back();
@@ -1291,6 +1381,7 @@ document.getElementById('copyLink').addEventListener('click', async e => {
 
 render();
 syncPacket();
+syncAbout();
 syncAddressBar();
 // First visit on iPhone: show how to save as an app (once). Then keep asking for surgery details until filled in.
 if (SHOW_INSTALL) {
