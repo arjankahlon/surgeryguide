@@ -1124,6 +1124,46 @@ function renderHero(c) {
    patient's surgeon (e.g. "Dr. Lomas"), or "your surgeon" / "Your surgeon" if none is set.
    ============================================================ */
 const ABOUT = {
+  scope: {
+    title: 'Elbow arthroscopy',
+    lede: 'Uses a tiny camera to look inside your elbow joint and treat problems through very small cuts.',
+    sections: [
+      ['What it does', '<p>{Surgeon} looks inside the joint and treats what’s causing your symptoms. Depending on your elbow, this can include:</p>' + ul(['Removing loose pieces of bone or cartilage', 'Trimming bone spurs or scar tissue so the elbow moves better', 'Cleaning up or smoothing damaged tissue'])],
+      ['How it’s done', ul(['A few small cuts, each about the size of a buttonhole, are made around your elbow.', 'A tiny camera goes in through one cut, and small tools through the others.', 'The joint is filled with fluid so {surgeon} can see clearly.', 'The cuts are closed and covered with a bandage.', 'You go home the same day.'])],
+      ['After surgery', ul(['This site has the steps, day by day.', 'Your elbow is wrapped in a soft bandage, and you may wear a sling for comfort.', 'Moving your elbow early helps prevent stiffness. You’ll get a home exercise program.', 'No heavy lifting until {surgeon} says it’s OK.'])],
+    ],
+    source: 'Based on: AAOS OrthoInfo, <a href="https://www.orthoinfo.org/bodypart/elbow/elbow-arthroscopy/" target="_blank" rel="noopener">“Elbow Arthroscopy”</a>.',
+  },
+  ucl: {
+    title: 'UCL repair',
+    lede: 'Fixes or rebuilds the ulnar collateral ligament (UCL), a strong band on the inner side of your elbow.',
+    sections: [
+      ['What it does', '<p>A ligament is a tough band that holds two bones together. The UCL keeps the inner side of your elbow steady, especially when you throw or push your arm outward.</p><p>This surgery gives your elbow that support back, so it feels stable again.</p>'],
+      ['How it’s done', ul(['A cut is made on the inner side of your elbow.', 'Depending on your elbow, {surgeon} either <strong>repairs</strong> your own ligament, or <strong>rebuilds</strong> it with a tendon graft.', 'A repair stitches the ligament back to the bone, often with a strong tape for extra support.', 'A graft usually comes from a spare tendon in your own wrist or leg, or sometimes from a donor. If it’s from your body, there’s a small second cut there.', 'The ligament is held in place with small tunnels in the bone, small implants, or both.', 'The nearby ulnar nerve may also be moved to protect it.', 'You usually go home the same day.'])],
+      ['After surgery', ul(['This site has the steps, day by day.', 'Your arm starts in a splint, then a hinged brace.', 'Physical therapy slowly brings back your motion and strength.', 'No lifting, throwing or sports until {surgeon} says it’s OK. A rebuilt ligament can take many months before full sports.'])],
+    ],
+    source: 'Based on: AAOS OrthoInfo, <a href="https://www.orthoinfo.org/bodypart/elbow/ulnar-collateral-ligament-ucl-injury/" target="_blank" rel="noopener">“Ulnar Collateral Ligament (UCL) Injury”</a>.',
+  },
+  unt: {
+    title: 'Ulnar nerve transposition',
+    lede: 'Moves the ulnar nerve (your “funny bone” nerve) to a new spot, so it isn’t squeezed or stretched when you bend your elbow.',
+    sections: [
+      ['What it does', '<p>The ulnar nerve runs along the inner side of your elbow. It gives feeling to your ring and little fingers and helps control the small muscles in your hand.</p><p>Moving it to the front of the elbow takes pressure off it. This can ease numbness, tingling and weakness in your hand.</p>'],
+      ['How it’s done', ul(['A cut is made along the inner side of your elbow.', '{Surgeon} frees the nerve from any tight tissue around it.', 'The nerve is moved to the front of the elbow. Depending on your elbow, it’s placed just under the skin, or deeper, within or under the muscle.', 'Soft tissue is used to keep it from sliding back.', 'You go home the same day.'])],
+      ['After surgery', ul(['This site has the steps, day by day.', 'You may wear a splint for a few days to a few weeks. It’s often longer if the nerve was placed under the muscle.', 'Nerves heal slowly. Numbness and tingling can take weeks to months to get better.', 'No heavy lifting until {surgeon} says it’s OK.'])],
+    ],
+    source: 'Based on: AAOS OrthoInfo, <a href="https://www.orthoinfo.org/bodypart/elbow/ulnar-nerve-entrapment-at-the-elbow/" target="_blank" rel="noopener">“Cubital Tunnel Syndrome”</a>.',
+  },
+  epi: {
+    title: 'Epicondylectomy',
+    lede: 'Removes part of a bony bump (epicondyle) on the side of your elbow.',
+    sections: [
+      ['What it does', '<p>The epicondyles are the bony bumps on the inner and outer sides of your elbow. Depending on your elbow, removing part of one can:</p>' + ul(['Take pressure off the ulnar nerve on the inner side, which can ease numbness and tingling in your hand', 'Clear away damaged tissue where tendons attach, which can ease long-lasting elbow pain'])],
+      ['How it’s done', ul(['A cut is made over the inner or outer side of your elbow.', 'A small part of the bony bump is removed and the bone is smoothed.', 'Nearby tendons, muscles or the ulnar nerve may be cleaned up, released or repaired at the same time.', 'The tissue over the bone is closed back up.', 'You go home the same day.'])],
+      ['After surgery', ul(['This site has the steps, day by day.', 'Your arm may be in a splint or soft dressing at first.', 'Physical therapy may help bring back your motion and strength.', 'No heavy lifting until {surgeon} says it’s OK.'])],
+    ],
+    source: 'Based on: AAOS OrthoInfo, <a href="https://www.orthoinfo.org/bodypart/elbow/ulnar-nerve-entrapment-at-the-elbow/" target="_blank" rel="noopener">“Cubital Tunnel Syndrome”</a> and <a href="https://www.orthoinfo.org/bodypart/elbow/tennis-elbow-lateral-epicondylitis/" target="_blank" rel="noopener">“Tennis Elbow”</a>.',
+  },
   dbr: {
     title: 'Distal biceps repair',
     lede: 'Reattaches your biceps tendon to the forearm bone, just below the elbow.',
